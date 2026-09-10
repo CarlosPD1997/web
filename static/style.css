@@ -1,0 +1,1266 @@
+/* ========== ESTILOS GENERALES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+    background: linear-gradient(135deg, #003366, #1a4f8b);
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+/* ========== PERSONALIZACIÓN CON IMÁGENES ========== */
+
+/* Logo en navbar */
+.nav-logo {
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 10px;
+    border-radius: 8px;
+}
+
+/* Fondo institucional */
+body {
+    background-image: url('/static/images/fondo-institucional.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+/* Contenedor semi-transparente */
+.container {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 16px;
+    padding: 20px 20px 30px 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+/* Banner institucional */
+.banner-institucional {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-texto {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 30px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    color: white;
+}
+
+.banner-texto h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.banner-texto p {
+    margin: 5px 0 0 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.banner-sub {
+    font-weight: bold;
+    color: #ffd700;
+    font-size: 1.1rem !important;
+}
+
+/* Iconos de salas */
+.sala-icono {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 12px auto;
+    border-radius: 50%;
+    background: #f0f4f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid #3498db;
+}
+
+.sala-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sala-icono-default {
+    font-size: 2.5rem;
+}
+
+.capacidad-sala {
+    font-weight: bold;
+    color: #2c3e50 !important;
+    margin-top: 8px;
+    font-size: 0.85rem !important;
+}
+
+/* Logo en login */
+.auth-logo img {
+    display: block;
+    margin: 0 auto 15px auto;
+}
+
+@media (max-width: 768px) {
+    .banner-institucional {
+        height: 150px;
+    }
+    .banner-texto h2 {
+        font-size: 1.2rem;
+    }
+    .banner-texto p {
+        font-size: 0.8rem;
+    }
+    .sala-icono {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nav-brand span {
+    color: #FFC300;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.nav-link:hover {
+    background: rgba(255,195,0,0.25);
+}
+
+.nav-link.logout:hover {
+    background: #c0392b;
+}
+
+.badge-admin {
+    background: #FFC300;
+    color: #003366;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+ .nav-logo {
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 10px;
+    border-radius: 8px;
+}
+
+/* ========== TARJETAS DE SALAS (AZUL REY + TRANSPARENTE) ========== */
+.salas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.sala-card {
+    background: rgba(26, 35, 126, 0.85); /* Azul rey con transparencia */
+    backdrop-filter: blur(8px); /* Efecto de vidrio esmerilado */
+    -webkit-backdrop-filter: blur(8px);
+    padding: 25px 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(26, 35, 126, 0.3);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+    color: white;
+}
+
+.sala-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 40px rgba(26, 35, 126, 0.5);
+    background: rgba(26, 35, 126, 0.95);
+    border-color: rgba(255, 215, 0, 0.5);
+}
+
+.sala-card h2 {
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.sala-card p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    margin: 4px 0;
+}
+
+.capacidad-sala {
+    font-weight: bold;
+    color: #ffd700 !important;
+    margin-top: 8px;
+    font-size: 0.85rem !important;
+    background: rgba(0,0,0,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+/* Iconos de salas sobre fondo azul */
+.sala-icono {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 12px auto;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.3s ease;
+}
+
+.sala-card:hover .sala-icono {
+    border-color: #ffd700;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.sala-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sala-icono-default {
+    font-size: 2.5rem;
+    color: white;
+}
+
+/* Badge para CC5 en tarjetas azules */
+.sala-card .badge-admin {
+    background: #ffd700;
+    color: #1a237e;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+/* Efecto de brillo al pasar el mouse */
+.sala-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.sala-card:hover::before {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sala-icono {
+        width: 60px;
+        height: 60px;
+    }
+    .sala-card h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* ========== CONTENEDOR PRINCIPAL ========== */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #003366;
+    margin-bottom: 30px;
+}
+
+h1 span {
+    color: #FFC300;
+}
+
+/* ========== ALERTAS ========== */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #FFC300;
+}
+
+.alert-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #003366;
+}
+
+/* ========== TABS DE SALAS ========== */
+.tabs-salas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.tab-sala {
+    padding: 10px 20px;
+    background: #f8f9fa;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.tab-sala:hover {
+    background: #e3edf7;
+    color: #003366;
+}
+
+.tab-sala.active {
+    background: #003366;
+    color: white;
+    box-shadow: 0 -2px 8px rgba(0,51,102,0.3);
+}
+
+.tab-sala .badge-admin {
+    font-size: 0.6rem;
+    margin-left: 4px;
+}
+
+/* ========== FECHA SELECTOR ========== */
+.fecha-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.fecha-selector input[type="date"] {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 1rem;
+    background: white;
+}
+
+.fecha-selector input[type="date"]:focus {
+    border-color: #003366;
+    outline: none;
+}
+
+.fecha-selector button {
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    background: #003366;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.fecha-selector button:hover {
+    background: #002244;
+}
+
+.fecha-selector button.btn-primary {
+    background: #FFC300;
+    color: #003366;
+}
+
+.fecha-selector button.btn-primary:hover {
+    background: #e6b000;
+}
+
+/* ========== CALENDARIO ========== */
+.calendario-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.calendario-header h2 {
+    margin: 0;
+    color: #003366;
+    font-size: 1.2rem;
+}
+
+.fecha-titulo {
+    font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.calendario-grid {
+    display: flex;
+    padding: 10px;
+    gap: 4px;
+    overflow-x: auto;
+}
+
+.grid-horas {
+    min-width: 70px;
+    flex-shrink: 0;
+}
+
+.hora-label {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 500;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.hora-label.vacio {
+    height: 40px;
+    border-bottom: none;
+}
+
+.grid-bloques {
+    flex: 1;
+    min-width: 0;
+}
+
+.bloque {
+    height: 50px;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: default;
+    transition: all 0.2s;
+    padding: 0 6px;
+    text-align: center;
+    border: 2px solid transparent;
+}
+
+.bloque-disponible {
+    background: #e8f5e9;
+    color: #2e7d32;
+    cursor: pointer;
+    border-color: #a5d6a7;
+}
+
+.bloque-disponible:hover {
+    background: #c8e6c9;
+    transform: scale(1.02);
+    border-color: #66bb6a;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+}
+
+.bloque-ocupado {
+    background: #ffebee;
+    color: #c62828;
+    border-color: #ef9a9a;
+}
+
+.bloque-ocupado-mio {
+    background: #fff3e0;
+    color: #e65100;
+    border-color: #FFC300;
+    border-width: 3px;
+}
+
+.bloque-clase {
+    background: #e3f2fd;
+    color: #003366;
+    border-color: #1a4f8b;
+    border-width: 2px;
+    cursor: default;
+}
+
+.bloque-clase .usuario-bloque {
+    font-weight: bold;
+}
+
+.hora-bloque {
+    font-size: 0.6rem;
+    opacity: 0.7;
+}
+
+.usuario-bloque {
+    font-size: 0.65rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+}
+
+.disponible-texto {
+    font-size: 0.65rem;
+    font-weight: bold;
+}
+.mensaje-info {
+    padding: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* ========== FORMULARIO DE RESERVA RÁPIDA ========== */
+.form-reserva-rapida {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin: 20px 0;
+    border-left: 6px solid #003366;
+}
+
+.form-reserva-rapida h3 {
+    margin-top: 0;
+    color: #003366;
+}
+
+.form-reserva-rapida .form-group {
+    margin-bottom: 12px;
+}
+
+.form-reserva-rapida .form-group label {
+    font-weight: 500;
+    color: #555;
+}
+
+.form-reserva-rapida .btn-primary {
+    margin-right: 10px;
+}
+
+.form-reserva-rapida .btn-cancelar {
+    padding: 12px 25px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.form-reserva-rapida .btn-cancelar:hover {
+    background: #c0392b;
+}
+
+/* ========== PANEL DE ADMINISTRACIÓN ========== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin: 20px 0 30px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    border-top: 4px solid #003366;
+}
+
+.stat-card h3 {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #003366;
+}
+
+.admin-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+
+.admin-section h2 {
+    color: #003366;
+    margin-bottom: 20px;
+}
+
+.admin-section h2 span {
+    color: #FFC300;
+}
+
+.admin-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #FFC300;
+}
+
+.admin-form h3 {
+    margin-bottom: 12px;
+    color: #003366;
+}
+
+.form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-inline input {
+    flex: 1;
+    min-width: 150px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.form-inline input:focus {
+    border-color: #003366;
+    outline: none;
+}
+
+/* ========== TABLAS ========== */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+table thead {
+    background: #003366;
+    color: white;
+}
+
+table thead th {
+    color: white;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+table tbody tr:hover {
+    background: #f0f6fe;
+}
+
+.badge-usuario {
+    background: #003366;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+.badge-admin {
+    background: #FFC300;
+    color: #003366;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.badge-activa {
+    background: #27ae60;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+.badge-cancelada {
+    background: #e74c3c;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+/* ========== AUTENTICACIÓN ========== */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #003366 0%, #1a4f8b 100%);
+    padding: 20px;
+}
+
+.auth-box {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 420px;
+    width: 100%;
+    border-top: 6px solid #FFC300;
+}
+
+.auth-box h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #003366;
+}
+
+.auth-box h1 span {
+    color: #FFC300;
+}
+
+.auth-box .form-group {
+    margin-bottom: 15px;
+}
+
+.auth-box .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.auth-box .form-group input:focus {
+    border-color: #003366;
+    outline: none;
+}
+
+.auth-box .btn-primary {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 20px;
+    color: #7f8c8d;
+}
+
+.auth-link a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-link a:hover {
+    color: #FFC300;
+}
+
+.demo-credentials {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    border-left: 4px solid #FFC300;
+}
+
+.demo-credentials p {
+    margin: 3px 0;
+}
+
+/* ========== BOTONES ========== */
+.btn-primary {
+    background: #003366;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background: #002244;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,51,102,0.4);
+}
+
+.btn-cancelar {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+}
+
+.btn-cancelar:hover {
+    background: #c0392b;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .nav-user {
+        justify-content: center;
+    }
+    
+    .calendario-grid {
+        flex-direction: column;
+        padding: 5px;
+    }
+    
+    .grid-horas {
+        display: none;
+    }
+    
+    .bloque {
+        height: 45px;
+        font-size: 0.7rem;
+    }
+    
+    .tab-sala {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+    
+    .fecha-selector {
+        flex-direction: column;
+    }
+    
+    .fecha-selector input[type="date"] {
+        width: 100%;
+    }
+    
+    .fecha-selector button {
+        width: 100%;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .form-inline {
+        flex-direction: column;
+    }
+    
+    .form-inline input {
+        width: 100%;
+    }
+    
+    .auth-box {
+        padding: 25px;
+    }
+    
+    .calendario-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bloque {
+        height: 40px;
+        font-size: 0.6rem;
+    }
+    
+    .usuario-bloque {
+        max-width: 60px;
+    }
+}
+
+/* ========== CLASES FIJAS ========== */
+.bloque-clase {
+    background: #e3f2fd;
+    color: #003366;
+    border-color: #1a4f8b;
+    border-width: 2px;
+    cursor: default;
+}
+
+.bloque-clase .usuario-bloque {
+    font-weight: bold;
+}
+
+.bloque-ocupado {
+    background: #ffebee;
+    color: #c62828;
+    border-color: #ef9a9a;
+}
+
+.bloque-ocupado-mio {
+    background: #fff3e0;
+    color: #e65100;
+    border-color: #FFC300;
+    border-width: 3px;
+}
+
+.bloque-disponible {
+    background: #e8f5e9;
+    color: #2e7d32;
+    cursor: pointer;
+    border-color: #a5d6a7;
+}
+
+.bloque-disponible:hover {
+    background: #c8e6c9;
+    transform: scale(1.02);
+    border-color: #66bb6a;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+}
+
+/* ========== FORMULARIO DE CLASES ========== */
+.form-clase {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+.form-row .form-group label {
+    display: block;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
+
+.form-row .form-group input,
+.form-row .form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.95rem;
+}
+
+.form-row .form-group input:focus,
+.form-row .form-group select:focus {
+    border-color: #003366;
+    outline: none;
+}
+
+/* ========== BADGE CLASE ========== */
+.badge-clase {
+    background: #003366;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-row .form-group {
+        min-width: 100%;
+    }
+}
+
+/* ========== BADGE PENDIENTE ========== */
+.badge-pendiente {
+    background: #FFC300;
+    color: #003366;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* ========== TABLA DE SOLICITUDES ========== */
+.admin-section .table-container {
+    margin-top: 10px;
+}
+
+.admin-section .table-container table td form {
+    display: inline-block;
+    margin: 2px;
+}
+
+.admin-section .table-container table td form input[type="text"] {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 0.8rem;
+}
+
+.admin-section .table-container table td form input[type="text"]:focus {
+    border-color: #003366;
+    outline: none;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+    /* Agregar imagen de fondo sutil */
+    background-image: url('/static/images/fondo-institucional.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+/* Fondo para los contenedores (semi-transparente) */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 16px;
+    padding: 20px 20px 30px 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+/* Para el panel de administración también */
+.admin-section {
+    background: rgba(255, 255, 255, 0.95);
+    /* ... resto de estilos ... */
+}
+
+/* ========== BANNER INSTITUCIONAL ========== */
+.banner-institucional {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-texto {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 30px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    color: white;
+}
+
+.banner-texto h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.banner-texto p {
+    margin: 5px 0 0 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.banner-sub {
+    font-weight: bold;
+    color: #ffd700;
+    font-size: 1.1rem !important;
+}
+
+@media (max-width: 768px) {
+    .banner-institucional {
+        height: 150px;
+    }
+    .banner-texto h2 {
+        font-size: 1.2rem;
+    }
+    .banner-texto p {
+        font-size: 0.8rem;
+    }
+/* ========== BOTÓN ELIMINAR USUARIO ========== */
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+/* ========== TABLA DE USUARIOS ========== */
+.admin-section table td {
+    vertical-align: middle;
+}
+
+.admin-section table td select {
+    background: white;
+    cursor: pointer;
+}
+
+.admin-section table td select:focus {
+    border-color: #3498db;
+    outline: none;
+ }
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todas las Reservas - Admin</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">📋 Todas las Reservas</div>
+            <div class="nav-user">
+                <span>👤 {{ session.usuario_nombre }}</span>
+                <a href="/admin" class="nav-link">⚙️ Panel Admin</a>
+                <a href="/" class="nav-link">🏠 Inicio</a>
+                <a href="/logout" class="nav-link logout">🚪 Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>📋 Historial de Reservas</h1>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Sala</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Fecha</th>
+                        <th>Hora Inicio</th>
+                        <th>Hora Fin</th>
+                        <th>Estado</th>
+                        <th>Mensaje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reserva in reservas %}
+                    <tr>
+                        <td>{{ reserva[0] }}</td>
+                        <td><strong>{{ reserva[1] }}</strong></td>
+                        <td>{{ reserva[2] }}</td>
+                        <td><a href="mailto:{{ reserva[3] }}">{{ reserva[3] }}</a></td>
+                        <td>{{ reserva[4] }}</td>
+                        <td>{{ reserva[5] }}</td>
+                        <td>{{ reserva[6] }}</td>
+                        <td>
+                            {% if reserva[7] == 'pendiente' %}
+                                <span class="badge-pendiente" style="background:#ff9800; color:white; padding:3px 10px; border-radius:12px;">⏳ Pendiente</span>
+                            {% elif reserva[7] == 'activa' %}
+                                <span class="badge-activa" style="background:#27ae60; color:white; padding:3px 10px; border-radius:12px;">✅ Activa</span>
+                            {% elif reserva[7] == 'rechazada' %}
+                                <span class="badge-cancelada" style="background:#e74c3c; color:white; padding:3px 10px; border-radius:12px;">❌ Rechazada</span>
+                            {% elif reserva[7] == 'cancelada' %}
+                                <span class="badge-cancelada" style="background:#95a5a6; color:white; padding:3px 10px; border-radius:12px;">🗑️ Cancelada</span>
+                            {% endif %}
+                        </td>
+                        <td style="max-width: 200px; font-size: 0.85rem; color: #555;">
+                            {{ reserva[8] or '-' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <a href="/admin" class="btn-primary">⬅️ Volver al Panel</a>
+    </div>
+</body>
+</html>

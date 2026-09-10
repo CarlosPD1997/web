@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Salas - CCH Azca</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/style.css">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        /* Estilos adicionales para los formularios mejorados */
+        .form-aprobar {
+            display: inline-block;
+            background: #f0fdf4;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #86efac;
+            margin-bottom: 4px;
+        }
+        .form-rechazar {
+            display: inline-block;
+            background: #fef2f2;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #fca5a5;
+            margin-top: 4px;
+        }
+        .input-aprobar {
+            width: 180px;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+        }
+        .input-rechazar {
+            width: 180px;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.8rem;
+        }
+        .btn-aprobar {
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-aprobar:hover {
+            background: #16a34a;
+        }
+        .btn-rechazar {
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-rechazar:hover {
+            background: #dc2626;
+        }
+        .acciones-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <img src="/static/images/logo.png" alt="CCH Azca" class="nav-logo" style="height:35px; vertical-align:middle; margin-right:10px;">
+            ⚙️ Panel Admin - CCH Azca
+        </div>
+        <div class="nav-user">
+            <span>👤 {{ session.usuario_nombre }}</span>
+            <a href="/" class="nav-link">🏠 Inicio</a>
+            <a href="/logout" class="nav-link logout">🚪 Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+    <div class="container">
+        <h1>⚙️ Panel de Administración</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card" style="border-left: 4px solid #ff9800;">
+                <h3>⏳ Solicitudes Pendientes</h3>
+                <p class="stat-number" style="color: #ff9800;">{{ total_pendientes }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>📊 Total Reservas</h3>
+                <p class="stat-number">{{ total_reservas }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>📅 Reservas Hoy</h3>
+                <p class="stat-number">{{ reservas_hoy }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>📚 Clases Fijas</h3>
+                <p class="stat-number">{{ total_clases }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>🏫 Salas</h3>
+                <p class="stat-number">{{ salas|length }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>👥 Usuarios</h3>
+                <p class="stat-number">{{ usuarios|length }}</p>
+            </div>
+        </div>
+
+        <!-- ========== SOLICITUDES PENDIENTES ========== -->
+<div class="admin-section" style="border: 2px solid #ff9800;">
+    <h2 style="color: #ff9800;">⏳ Solicitudes Pendientes de Aprobación</h2>
+    
+    {% if solicitudes %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sala</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Fecha</th>
+                        <th>Horario</th>
+                        <th>👥 Alumnos</th>
+                        <th>💬 Comentarios</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sol in solicitudes %}
+                    <tr>
+                        <td><strong>{{ sol[1] }}</strong></td>
+                        <td>{{ sol[2] }}</td>
+                        <td><a href="mailto:{{ sol[3] }}">{{ sol[3] }}</a></td>
+                        <td>{{ sol[4] }}</td>
+                        <td>{{ sol[5] }} - {{ sol[6] }}</td>
+                        <td><strong>{{ sol[7] }}</strong></td>
+                        <td style="max-width: 150px; font-size: 0.85rem; color: #555;">
+                            {{ sol[8] or '-' }}
+                        </td>
+                        <td>
+                            <form action="/admin/reserva/aprobar/{{ sol[0] }}" method="POST" style="display:inline-block; background:#f0fdf4; padding:8px; border-radius:8px; border:1px solid #86efac; margin-bottom:4px;">
+                                <input type="text" name="mensaje" placeholder="Mensaje de confirmación" style="width:180px; padding:6px; border-radius:4px; border:1px solid #ddd; font-size:0.8rem;">
+                                <button type="submit" class="btn-primary" style="padding:4px 12px; font-size:0.8rem;">✅ Aprobar</button>
+                            </form>
+                            <form action="/admin/reserva/rechazar/{{ sol[0] }}" method="POST" style="display:inline-block; background:#fef2f2; padding:8px; border-radius:8px; border:1px solid #fca5a5;">
+                                <input type="text" name="mensaje_rechazo" placeholder="Motivo del rechazo" required style="width:180px; padding:6px; border-radius:4px; border:1px solid #ddd; font-size:0.8rem;">
+                                <button type="submit" class="btn-danger" style="padding:4px 12px; font-size:0.8rem;">❌ Rechazar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p style="color: #27ae60; text-align: center; padding: 20px;">✅ No hay solicitudes pendientes</p>
+    {% endif %}
+</div>
+
+        <!-- ========== GESTIÓN DE CLASES FIJAS ========== -->
+        <div class="admin-section">
+            <h2>📚 Gestión de Clases Fijas (Horario Semestral)</h2>
+            
+            <div class="admin-form">
+                <h3>➕ Agregar Clase</h3>
+                <form action="/admin/clase/agregar" method="POST" class="form-clase">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Sala:</label>
+                            <select name="sala_id" required>
+                                {% for sala in salas %}
+                                    <option value="{{ sala[0] }}">{{ sala[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Materia:</label>
+                            <input type="text" name="materia" placeholder="Ej: Programación" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Profesor:</label>
+                            <input type="text" name="profesor" placeholder="Ej: Ing. Pérez" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Número de Alumnos:</label>
+                            <input type="number" name="num_alumnos" placeholder="20" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Día:</label>
+                            <select name="dia_semana" required>
+                                {% for dia in dias_semana %}
+                                    <option value="{{ dia }}">{{ dia }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Hora Inicio:</label>
+                            <input type="time" name="hora_inicio" min="07:00" max="20:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora Fin:</label>
+                            <input type="time" name="hora_fin" min="08:00" max="21:00" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">📌 Agregar Clase</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <h3>📋 Clases Registradas</h3>
+                {% if clases_fijas %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sala</th>
+                                <th>Materia</th>
+                                <th>Profesor</th>
+                                <th>Alumnos</th>
+                                <th>Día</th>
+                                <th>Horario</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for clase in clases_fijas %}
+                            <tr>
+                                <td><strong>{{ clase[1] }}</strong></td>
+                                <td>{{ clase[2] }}</td>
+                                <td>{{ clase[3] }}</td>
+                                <td>{{ clase[4] }}</td>
+                                <td>{{ clase[5] }}</td>
+                                <td>{{ clase[6] }} - {{ clase[7] }}</td>
+                                <td>
+                                    {% if clase[8] == 1 %}
+                                        <span class="badge-activa">Activa</span>
+                                    {% else %}
+                                        <span class="badge-cancelada">Inactiva</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form action="/admin/clase/eliminar/{{ clase[0] }}" method="POST" 
+                                          onsubmit="return confirm('⚠️ ¿Eliminar la clase de {{ clase[2] }}?')">
+                                        <button type="submit" class="btn-danger">🗑️</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p style="color: #888; text-align: center; padding: 20px;">No hay clases registradas</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ========== GESTIÓN DE SALAS ========== -->
+        <div class="admin-section">
+            <h2>🏫 Gestión de Salas</h2>
+            
+            <div class="admin-form">
+    <h3>Agregar Sala</h3>
+    <form action="/admin/sala/agregar" method="POST" class="form-inline">
+        <input type="text" name="nombre" placeholder="Nombre (ej: CC6)" required>
+        <input type="text" name="descripcion" placeholder="Descripción">
+        <input type="number" name="capacidad" placeholder="Capacidad" min="1" value="25" required style="width:120px;">
+        <button type="submit" class="btn-primary">➕ Agregar</button>
+    </form>
+</div>
+
+            <div class="table-container">
+                <table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>👥 Capacidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sala in salas %}
+        <tr>
+            <td>{{ sala[0] }}</td>
+            <td><strong>{{ sala[1] }}</strong></td>
+            <td>{{ sala[2] }}</td>
+            <td><strong>{{ sala[3] }}</strong> alumnos</td>
+            <td>
+                <form action="/admin/sala/eliminar/{{ sala[0] }}" method="POST" 
+                      onsubmit="return confirm('⚠️ ¿Eliminar la sala {{ sala[1] }}?')">
+                    <button type="submit" class="btn-danger">🗑️ Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+            </div>
+        </div>
+
+        <!-- ========== GESTIÓN DE USUARIOS ========== -->
+        <div class="admin-section">
+            <h2>👥 Gestión de Usuarios</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>📧 Email</th>
+                            <th>📱 Teléfono</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario[0] }}</td>
+                            <td>{{ usuario[1] }}</td>
+                            <td><a href="mailto:{{ usuario[2] }}">{{ usuario[2] }}</a></td>
+                            <td>{{ usuario[3] or 'No registrado' }}</td>
+                            <td>
+                                <span class="badge-{{ usuario[4] }}">{{ usuario[4] }}</span>
+                            </td>
+                            <<td>
+    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+        <!-- Cambiar rol -->
+        <form action="/admin/usuario/cambiar_rol/{{ usuario[0] }}" method="POST" style="display:inline-flex; gap:3px; align-items:center;">
+            <select name="rol" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.8rem;">
+                <option value="usuario" {% if usuario[4] == 'usuario' %}selected{% endif %}>Usuario</option>
+                <option value="admin" {% if usuario[4] == 'admin' %}selected{% endif %}>Admin</option>
+            </select>
+            <button type="submit" class="btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">Cambiar</button>
+        </form>
+        
+        <!-- Eliminar usuario -->
+        {% if usuario[0] != session.usuario_id %}
+        <form action="/admin/usuario/eliminar/{{ usuario[0] }}" method="POST" 
+              onsubmit="return confirm('⚠️ ¿Eliminar al usuario {{ usuario[1] }}?\n\nSe cancelarán todas sus reservas.\nEl usuario podrá registrarse de nuevo con el mismo correo.')"
+              style="display:inline;">
+            <button type="submit" class="btn-danger" style="padding: 4px 10px; font-size: 0.8rem;">🗑️ Eliminar</button>
+        </form>
+        {% else %}
+        <span style="padding: 4px 10px; font-size: 0.75rem; color: #999; background: #f0f0f0; border-radius: 4px;">
+            (Tu cuenta)
+        </span>
+        {% endif %}
+    </div>
+</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========== VER TODAS LAS RESERVAS ========== -->
+<div class="admin-section">
+    <h2>📋 Reportes y Vistas</h2>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <a href="/admin/horario_semanal" class="btn-primary" style="background: #1a237e;">
+            📅 Ver Horario Semanal
+        </a>
+        <a href="/admin/reservas/todas" class="btn-primary">
+            📋 Ver todas las reservas
+        </a>
+    </div>
+</div>
+</body>
+</html>

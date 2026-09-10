@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Salas - CCH Azca</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/style.css">
+
+
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">📋 Mis Reservas</div>
+            <div class="nav-user">
+                <span>👤 {{ usuario }}</span>
+                <a href="/" class="nav-link">🏠 Inicio</a>
+                <a href="/logout" class="nav-link logout">🚪 Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>📋 Mis Reservas</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if reservas %}
+            <div class="table-container">
+               <table>
+    <thead>
+        <tr>
+            <th>Sala</th>
+            <th>Fecha</th>
+            <th>Horario</th>
+            <th>👥 Alumnos</th>
+            <th>Estado</th>
+            <th>Mensaje</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in reservas %}
+        <tr>
+            <td><strong>{{ r[1] }}</strong></td>
+            <td>{{ r[2] }}</td>
+            <td>{{ r[3] }} - {{ r[4] }}</td>
+            <td><strong>{{ r[7] or 'N/A' }}</strong></td>
+            <td>
+                {% if r[5] == 'pendiente' %}
+                    <span class="badge-pendiente">⏳ Pendiente</span>
+                {% elif r[5] == 'activa' %}
+                    <span class="badge-activa">✅ Activa</span>
+                {% elif r[5] == 'rechazada' %}
+                    <span class="badge-rechazada">❌ Rechazada</span>
+                {% elif r[5] == 'cancelada' %}
+                    <span class="badge-cancelada">🗑️ Cancelada</span>
+                {% endif %}
+            </td>
+            <td style="max-width: 200px; font-size: 0.85rem; color: #555;">
+                {% if r[6] %}
+                    {{ r[6] }}
+                {% else %}
+                    <span style="color: #bbb;">-</span>
+                {% endif %}
+                {% if r[8] %}
+                    <br><small style="color: #888;">💬 {{ r[8] }}</small>
+                {% endif %}
+            </td>
+            <td>
+                {% if r[5] == 'pendiente' or r[5] == 'activa' %}
+                    <form action="/cancelar/{{ r[0] }}" method="POST" 
+                          onsubmit="return confirm('¿Cancelar esta reserva?')">
+                        <button type="submit" class="btn-cancelar">🗑️ Cancelar</button>
+                    </form>
+                {% else %}
+                    <span style="color: #bbb; font-size: 0.8rem;">Sin acciones</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+            </div>
+        {% else %}
+            <div class="mensaje-info" style="text-align: center; padding: 40px;">
+                <p style="font-size: 1.2rem;">📭 No tienes reservas</p>
+                <p style="color: #888;">Haz clic en <strong>"Inicio"</strong> para reservar una sala</p>
+            </div>
+        {% endif %}
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="/" class="btn-primary">🏠 Volver al Inicio</a>
+        </div>
+    </div>
+
+    <style>
+        .badge-pendiente {
+            background: #ff9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .badge-activa {
+            background: #27ae60;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .badge-rechazada {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .badge-cancelada {
+            background: #95a5a6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: middle;
+        }
+        table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        .btn-cancelar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+        .btn-cancelar:hover {
+            background: #c0392b;
+        }
+        .mensaje-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+        }
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.8rem;
+            }
+            table th, table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</body>
+</html>

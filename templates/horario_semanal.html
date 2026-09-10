@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horario Semanal - Admin</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .horario-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .horario-titulo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .horario-titulo h1 {
+            font-size: 2rem;
+            color: #1a237e;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .horario-titulo p {
+            font-size: 1rem;
+            color: #555;
+            margin: 5px 0 0 0;
+        }
+
+        .horario-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            min-width: 900px;
+        }
+
+        .horario-tabla th {
+            background: #1a237e;
+            color: white;
+            padding: 10px 6px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 2px solid white;
+        }
+
+        .horario-tabla th.hora-header {
+            background: #0d1445;
+            width: 100px;
+        }
+
+        .horario-tabla td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: center;
+            vertical-align: middle;
+            height: 55px;
+            position: relative;
+        }
+
+        .horario-tabla td.hora-col {
+            background: #f5f5f5;
+            font-weight: bold;
+            color: #333;
+            font-size: 0.75rem;
+            width: 100px;
+        }
+
+        .celda-ocupada {
+            border-radius: 6px;
+            padding: 4px 6px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .celda-materia {
+            font-weight: bold;
+            font-size: 0.72rem;
+            color: #000;
+            line-height: 1.1;
+        }
+
+        .celda-grupo {
+            font-size: 0.68rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .celda-sala {
+            background: white;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: #000;
+            margin-top: 2px;
+        }
+
+        .celda-vacia {
+            color: #ccc;
+            font-size: 0.7rem;
+        }
+
+        /* Filtros */
+        .filtros-horario {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filtros-horario select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+
+        .filtros-horario button {
+            padding: 8px 16px;
+            background: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .filtros-horario button:hover {
+            background: #283593;
+        }
+
+        /* Leyenda */
+        .leyenda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+
+        .leyenda-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .info-semana {
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .horario-titulo h1 {
+                font-size: 1.3rem;
+            }
+            .horario-tabla {
+                font-size: 0.65rem;
+            }
+            .horario-tabla td {
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">📅 Horario Semanal</div>
+            <div class="nav-user">
+                <span>👤 {{ session.usuario_nombre }}</span>
+                <a href="/admin" class="nav-link">⚙️ Panel Admin</a>
+                <a href="/" class="nav-link">🏠 Inicio</a>
+                <a href="/logout" class="nav-link logout">🚪 Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Título -->
+        <div class="horario-titulo">
+            <h1>💻 CENTRO DE CÓMPUTO</h1>
+            <p>HORARIOS OCUPADOS – TODA LA SEMANA</p>
+            <p class="info-semana">📅 Semana del {{ fecha_inicio }} al {{ fecha_fin }}</p>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filtros-horario">
+            <form method="GET" action="/admin/horario_semanal" style="display:flex; gap:10px; align-items:center;">
+                <label>Filtrar por sala:</label>
+                <select name="sala" onchange="this.form.submit()">
+                    <option value="todas" {% if sala_filtro == 'todas' %}selected{% endif %}>Todas las salas</option>
+                    {% for sala in salas %}
+                        <option value="{{ sala[0] }}" {% if sala_filtro == sala[0]|string %}selected{% endif %}>
+                            {{ sala[1] }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="button" onclick="window.print()">🖨️ Imprimir</button>
+            </form>
+        </div>
+
+        <!-- Tabla de horario -->
+        <div class="horario-container">
+            <table class="horario-tabla">
+                <thead>
+                    <tr>
+                        <th class="hora-header">HORA</th>
+                        {% for dia in dias %}
+                            <th>{{ dia|upper }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hora in horas %}
+                    <tr>
+                        <td class="hora-col">{{ hora }}</td>
+                        {% for dia in dias %}
+                            {% set celda = matriz[dia][hora] %}
+                            <td>
+                                {% if celda %}
+                                    <div class="celda-ocupada" style="background: {{ celda.color }};">
+                                        {% if celda.tipo == 'clase' %}
+                                            <div class="celda-materia">{{ celda.materia }}</div>
+                                            <div class="celda-grupo">{{ celda.profesor }}</div>
+                                            <div class="celda-sala">{{ celda.sala }}</div>
+                                        {% else %}
+                                            <div class="celda-materia">📌 Reserva</div>
+                                            <div class="celda-grupo">{{ celda.usuario }}</div>
+                                            <div class="celda-sala">{{ celda.sala }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <span class="celda-vacia">—</span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Leyenda de colores -->
+        <div class="leyenda">
+            <strong style="width: 100%; text-align: center; margin-bottom: 8px;">🎨 Materias:</strong>
+            {% for materia, color in materias_colores.items() %}
+                <div class="leyenda-item">
+                    <div class="leyenda-color" style="background: {{ color }};"></div>
+                    <span>{{ materia }}</span>
+                </div>
+            {% endfor %}
+            <div class="leyenda-item">
+                <div class="leyenda-color" style="background: #ffcc80;"></div>
+                <span>📌 Reserva</span>
+            </div>
+            <div class="leyenda-item">
+                <div class="leyenda-color" style="background: white; border: 1px solid #ccc;"></div>
+                <span>Espacio libre</span>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: #888; font-size: 0.8rem; margin-top: 15px;">
+            Nota: Los horarios están basados en las clases fijas y reservas activas de la semana actual.
+        </p>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/admin" class="btn-primary">⬅️ Volver al Panel</a>
+        </div>
+    </div>
+</body>
+</html>

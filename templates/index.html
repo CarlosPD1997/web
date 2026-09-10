@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Salas - CCH Azca</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <img src="/static/images/logo.png" alt="CCH Azca" class="nav-logo" style="height:40px; vertical-align:middle; margin-right:10px;">
+            📅 SACACC - CCH Azca
+        </div>
+        <div class="nav-user">
+            <span>👤 {{ usuario }}</span>
+            <a href="/mis_reservas" class="nav-link">📋 Mis Reservas</a>
+            {% if es_admin %}
+                <span class="badge-admin">Admin</span>
+                {% if solicitudes_pendientes > 0 %}
+                    <span class="badge-pendiente">⏳ {{ solicitudes_pendientes }}</span>
+                {% endif %}
+                <a href="/admin" class="nav-link">⚙️ Panel Admin</a>
+            {% endif %}
+            <a href="/logout" class="nav-link logout">🚪 Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Banner institucional -->
+<div class="banner-institucional">
+    <img src="/static/images/banner.jpg" alt="CCH Azca - Centro de Cómputo" class="banner-img">
+    <div class="banner-texto">
+        <h2>🏫 Centro de Cómputo</h2>
+        <p>Colegio de Ciencias y Humanidades - Plantel Azcapotzalco</p>
+        <p class="banner-sub">Sistema de Reservación de Salas</p>
+    </div>
+</div>
+
+   <div class="salas-grid">
+    {% for sala in salas %}
+    <div class="sala-card" onclick="seleccionarSala({{ sala[0] }}, '{{ sala[1] }}')">
+        <div class="sala-icono">
+            <!-- Icono según el nombre de la sala -->
+            {% if sala[1] == 'CC1' %}
+                <img src="/static/images/sala-cc1.png" alt="CC1" class="sala-img">
+            {% elif sala[1] == 'CC2' %}
+                <img src="/static/images/sala-cc2.png" alt="CC2" class="sala-img">
+            {% elif sala[1] == 'CC3' %}
+                <img src="/static/images/sala-cc3.png" alt="CC3" class="sala-img">
+            {% elif sala[1] == 'CC4' %}
+                <img src="/static/images/sala-cc4.png" alt="CC4" class="sala-img">
+            {% elif sala[1] == 'CC5' %}
+                <img src="/static/images/sala-cc5.png" alt="CC5" class="sala-img">
+            {% else %}
+                <div class="sala-icono-default">🖥️</div>
+            {% endif %}
+        </div>
+        <h2>{{ sala[1] }}</h2>
+        <p>{{ sala[2] }}</p>
+        <p class="capacidad-sala">👥 Capacidad: {{ sala[3] }} Usuarios</p>
+        {% if sala[1] == 'CC5' %}
+            <span class="badge-admin">🔒 Solo Admin</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+    <div class="container">
+        <h1>🏫 Gestión de Salas de Cómputo</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Selector de fecha -->
+        <div class="fecha-selector">
+            <button onclick="cambiarFecha(-1)">⬅️</button>
+            <input type="date" id="fecha-select" value="{{ hoy }}">
+            <button onclick="cambiarFecha(1)">➡️</button>
+            <button onclick="irHoy()" class="btn-primary">📅 Hoy</button>
+        </div>
+
+        <!-- Tabs de salas -->
+        <div class="tabs-salas">
+            {% for sala in salas %}
+                <button class="tab-sala {% if loop.first %}active{% endif %}" 
+                        onclick="seleccionarSala({{ sala[0] }}, '{{ sala[1] }}')"
+                        data-sala="{{ sala[0] }}">
+                    {{ sala[1] }}
+                    {% if sala[1] == 'CC5' %}
+                        <span class="badge-admin">🔒</span>
+                    {% endif %}
+                </button>
+            {% endfor %}
+        </div>
+
+        <!-- Calendario -->
+        <div class="calendario-container">
+            <div class="calendario-header">
+                <h2 id="sala-titulo">Selecciona una sala</h2>
+                <span id="fecha-titulo" class="fecha-titulo"></span>
+            </div>
+            
+            <div class="calendario-grid">
+                <div class="grid-horas">
+                    <div class="hora-label vacio">Hora</div>
+                    <div class="hora-label">07:00</div>
+                    <div class="hora-label">08:00</div>
+                    <div class="hora-label">09:00</div>
+                    <div class="hora-label">10:00</div>
+                    <div class="hora-label">11:00</div>
+                    <div class="hora-label">12:00</div>
+                    <div class="hora-label">13:00</div>
+                    <div class="hora-label">14:00</div>
+                    <div class="hora-label">15:00</div>
+                    <div class="hora-label">16:00</div>
+                    <div class="hora-label">17:00</div>
+                    <div class="hora-label">18:00</div>
+                    <div class="hora-label">19:00</div>
+                    <div class="hora-label">20:00</div>
+                </div>
+                
+                <div id="calendario-bloques" class="grid-bloques">
+                    <!-- Se llena con JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de reserva rápida -->
+<div id="form-reserva-rapida" class="form-reserva-rapida" style="display:none;">
+    <h3>📌 Reservar este horario</h3>
+    <form action="/reservar" method="POST" id="form-reserva">
+        <input type="hidden" name="sala_id" id="sala_id">
+        <input type="hidden" name="fecha" id="fecha-form">
+        <input type="hidden" name="hora_inicio" id="hora_inicio">
+        <input type="hidden" name="hora_fin" id="hora_fin">
+        
+        <div class="form-group">
+            <label>📅 Fecha: <span id="info-fecha"></span></label>
+        </div>
+        <div class="form-group">
+            <label>⏰ Horario: <span id="info-horario"></span></label>
+        </div>
+        
+        <!-- NUEVO: Número de alumnos -->
+        <div class="form-group">
+            <label>👥 Número de alumnos: <span style="color:red;">*</span></label>
+            <input type="number" name="num_alumnos" id="num_alumnos" min="1" max="100" required 
+                   placeholder="Ej: 25" style="padding:10px; border-radius:6px; border:1px solid #ddd;">
+            <small id="capacidad-info" style="color: #666; font-size:0.8rem;">Capacidad máxima de la sala: <span id="capacidad-maxima">-</span> alumnos</small>
+        </div>
+        
+        <!-- NUEVO: Comentarios -->
+        <div class="form-group">
+            <label>💬 Comentarios (opcional):</label>
+            <textarea name="comentarios" id="comentarios" rows="3" 
+                      placeholder="Ej: Necesito instalar un programa, es para examen, etc."
+                      style="width:100%; padding:10px; border-radius:6px; border:1px solid #ddd; resize:vertical;"></textarea>
+        </div>
+        
+        <button type="submit" class="btn-primary">📨 Enviar Solicitud</button>
+        <button type="button" onclick="cerrarReservaRapida()" class="btn-cancelar">❌ Cancelar</button>
+    </form>
+</div>
+
+    <script src="/static/script.js"></script>
+    <script>
+        // Inicializar cuando la página cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página cargada');
+            
+            // Seleccionar la primera sala
+            const primeraSala = document.querySelector('.tab-sala');
+            if (primeraSala) {
+                const id = primeraSala.dataset.sala;
+                const nombre = primeraSala.textContent.trim().replace('🔒', '').trim();
+                console.log('📌 Sala seleccionada:', id, nombre);
+                seleccionarSala(parseInt(id), nombre);
+            } else {
+                console.error('❌ No hay salas disponibles');
+            }
+        });
+    </script>
+</body>
+</html>
